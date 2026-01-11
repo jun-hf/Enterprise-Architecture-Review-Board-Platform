@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture Governance Platform - System Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+        
+        .architecture {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .layer {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .layer:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        
+        .layer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #cbd5e0;
+        }
+        
+        .layer-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .layer-title {
+            flex: 1;
+        }
+        
+        .layer-title h2 {
+            color: #2d3748;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .layer-title p {
+            color: #718096;
+            font-size: 0.95em;
+        }
+        
+        .components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .component {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .component:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .component h3 {
+            color: #2d3748;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .component ul {
+            list-style: none;
+            color: #4a5568;
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+        
+        .component ul li:before {
+            content: "→ ";
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .flow-arrow {
+            text-align: center;
+            padding: 15px 0;
+            color: #667eea;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        /* Color scheme for different layers */
+        .presentation .layer-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .business-logic .layer-icon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .data .layer-icon { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .intelligence .layer-icon { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; }
+        .integration .layer-icon { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+        
+        .legend-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+        }
+        
+        .key-features {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-radius: 15px;
+            border: 2px dashed #667eea;
+        }
+        
+        .key-features h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card p {
+            color: #4a5568;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .layer:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ AI-Powered Architecture Governance Platform</h1>
+            <p>Enterprise-Grade System Architecture for LSEG Engineering Governance</p>
+        </div>
+        
+        <div class="architecture">
+            <!-- Presentation Layer -->
+            <div class="layer presentation">
+                <div class="layer-header">
+                    <div class="layer-icon">💻</div>
+                    <div class="layer-title">
+                        <h2>Presentation Layer</h2>
+                        <p>User-facing applications and interfaces</p>
+                    </div>
+                </div>
+                <div class="components">
+                    <div class="component">
+                        <h3>📱 PowerApps Canvas</h3>
+                        <ul>
+                            <li>Submission Portal</li>
+                            <li>Review Dashboard</li>
+                            <li>Proposal Management</li>
+                            <li>Mobile & Desktop Views</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>📊 Power BI Dashboards</h3>
+                        <ul>
+                            <li>Executive Reports</li>
+                            <li>Operational Metrics</li>
+                            <li>Quality Analytics</li>
+                            <li>Trend Analysis</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>📧 Notifications</h3>
+                        <ul>
+                            <li>Email Alerts</li>
+                            <li>Teams Messages</li>
+                            <li>Calendar Integration</li>
+                            <li>Real-time Updates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- Business Logic Layer -->
+            <div class="layer business-logic">
+                <div class="layer-header">
+                    <div class="layer-icon">⚙️</div>
+                    <div class="layer-title">
+                        <h2>Business Logic Layer</h2>
+                        <p>Workflow automation and process orchestration</p>
+                    </div>
+                </div>
+                <div class="components">
+                    <div class="component">
+                        <h3>🔄 Submission Workflow</h3>
+                        <ul>
+                            <li>Intake Processing</li>
+                            <li>Validation Rules</li>
+                            <li>AI Trigger</li>
+                            <li>Status Management</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>🎯 Routing Engine</h3>
+                        <ul>
+                            <li>Risk-based Assignment</li>
+                            <li>Load Balancing</li>
+                            <li>Escalation Logic</li>
+                            <li>SLA Tracking</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>👥 ARB Management</h3>
+                        <ul>
+                            <li>Forum Scheduling</li>
+                            <li>Agenda Generation</li>
+                            <li>Decision Capture</li>
+                            <li>Action Tracking</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>✅ Approval Process</h3>
+                        <ul>
+                            <li>Review Aggregation</li>
+                            <li>Consensus Rules</li>
+                            <li>Conditional Logic</li>
+                            <li>Audit Trail</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- Data Layer -->
+            <div class="layer data">
+                <div class="layer-header">
+                    <div class="layer-icon">🗄️</div>
+                    <div class="layer-title">
+                        <h2>Data Layer</h2>
+                        <p>Persistent storage and data management</p>
+                    </div>
+                </div>
+                <div class="components">
+                    <div class="component">
+                        <h3>📋 SharePoint Lists</h3>
+                        <ul>
+                            <li>Proposals Repository</li>
+                            <li>Reviews Collection</li>
+                            <li>Standards Library</li>
+                            <li>Decision Records</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>💾 Dataverse Tables</h3>
+                        <ul>
+                            <li>Complex Relationships</li>
+                            <li>Business Rules</li>
+                            <li>Security Roles</li>
+                            <li>Advanced Queries</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>📁 Document Storage</h3>
+                        <ul>
+                            <li>Architecture Diagrams</li>
+                            <li>Design Documents</li>
+                            <li>Supporting Materials</li>
+                            <li>Version Control</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- Intelligence Layer -->
+            <div class="layer intelligence">
+                <div class="layer-header">
+                    <div class="layer-icon">🤖</div>
+                    <div class="layer-title">
+                        <h2>Intelligence Layer</h2>
+                        <p>AI-powered analysis and decision support</p>
+                    </div>
+                </div>
+                <div class="components">
+                    <div class="component">
+                        <h3>🧠 Azure OpenAI GPT-4</h3>
+                        <ul>
+                            <li>Document Analysis</li>
+                            <li>Standards Checking</li>
+                            <li>Risk Assessment</li>
+                            <li>Recommendations</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>🔍 Semantic Search</h3>
+                        <ul>
+                            <li>Text Embeddings</li>
+                            <li>Similarity Matching</li>
+                            <li>Historical Proposals</li>
+                            <li>Pattern Recognition</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>⚡ Azure Functions</h3>
+                        <ul>
+                            <li>Python Services</li>
+                            <li>Custom APIs</li>
+                            <li>Data Processing</li>
+                            <li>Integration Logic</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">↓</div>
+            
+            <!-- Integration Layer -->
+            <div class="layer integration">
+                <div class="layer-header">
+                    <div class="layer-icon">🔗</div>
+                    <div class="layer-title">
+                        <h2>Integration Layer</h2>
+                        <p>External systems and enterprise connectivity</p>
+                    </div>
+                </div>
+                <div class="components">
+                    <div class="component">
+                        <h3>👤 Microsoft Graph</h3>
+                        <ul>
+                            <li>User Profiles</li>
+                            <li>Calendar API</li>
+                            <li>Email Services</li>
+                            <li>Teams Integration</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>🔐 Azure AD</h3>
+                        <ul>
+                            <li>Authentication</li>
+                            <li>Authorization</li>
+                            <li>Role Management</li>
+                            <li>SSO Integration</li>
+                        </ul>
+                    </div>
+                    <div class="component">
+                        <h3>🛠️ DevOps Tools</h3>
+                        <ul>
+                            <li>Jira / Azure DevOps</li>
+                            <li>Git Repositories</li>
+                            <li>Slack / Teams</li>
+                            <li>API Connectors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Key Features -->
+        <div class="key-features">
+            <h2>🎯 Key Platform Capabilities</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>⚡ AI-Powered Analysis</h3>
+                    <p>Automated document analysis and standards compliance checking using GPT-4 reduces initial review time by 40% while ensuring consistency.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎯 Intelligent Routing</h3>
+                    <p>Risk-based proposal routing automatically assigns the right reviewers based on complexity, technology stack, and workload balancing.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Real-Time Analytics</h3>
+                    <p>Executive dashboards provide insights into governance pipeline, bottlenecks, quality trends, and process efficiency metrics.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔍 Knowledge Management</h3>
+                    <p>Searchable repository of past decisions with AI-powered similarity search helps maintain consistency and learn from history.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⏱️ SLA Management</h3>
+                    <p>Automated tracking and notifications ensure reviews meet service level agreements with escalation for overdue items.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🌐 Enterprise Scale</h3>
+                    <p>Built on Microsoft Power Platform with role-based access, supporting 25,000+ employees across 70 countries.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <span>User Interface</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                <span>Business Logic</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                <span>Data Storage</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+                <span>AI & Intelligence</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                <span>Integrations</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
